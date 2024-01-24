@@ -1,0 +1,291 @@
+diff --git a/.editorconfig b/.editorconfig
+new file mode 100644
+index 0000000..1639887
+--- /dev/null
++++ b/.editorconfig
+@@ -0,0 +1,59 @@
++[*]
++cpp_indent_braces=false
++cpp_indent_multi_line_relative_to=innermost_parenthesis
++cpp_indent_within_parentheses=indent
++cpp_indent_preserve_within_parentheses=false
++cpp_indent_case_labels=false
++cpp_indent_case_contents=true
++cpp_indent_case_contents_when_block=false
++cpp_indent_lambda_braces_when_parameter=true
++cpp_indent_goto_labels=one_left
++cpp_indent_preprocessor=leftmost_column
++cpp_indent_access_specifiers=false
++cpp_indent_namespace_contents=true
++cpp_indent_preserve_comments=false
++cpp_new_line_before_open_brace_namespace=ignore
++cpp_new_line_before_open_brace_type=ignore
++cpp_new_line_before_open_brace_function=ignore
++cpp_new_line_before_open_brace_block=ignore
++cpp_new_line_before_open_brace_lambda=ignore
++cpp_new_line_scope_braces_on_separate_lines=false
++cpp_new_line_close_brace_same_line_empty_type=false
++cpp_new_line_close_brace_same_line_empty_function=false
++cpp_new_line_before_catch=true
++cpp_new_line_before_else=true
++cpp_new_line_before_while_in_do_while=false
++cpp_space_before_function_open_parenthesis=remove
++cpp_space_within_parameter_list_parentheses=false
++cpp_space_between_empty_parameter_list_parentheses=false
++cpp_space_after_keywords_in_control_flow_statements=true
++cpp_space_within_control_flow_statement_parentheses=false
++cpp_space_before_lambda_open_parenthesis=false
++cpp_space_within_cast_parentheses=false
++cpp_space_after_cast_close_parenthesis=false
++cpp_space_within_expression_parentheses=false
++cpp_space_before_block_open_brace=true
++cpp_space_between_empty_braces=false
++cpp_space_before_initializer_list_open_brace=false
++cpp_space_within_initializer_list_braces=true
++cpp_space_preserve_in_initializer_list=true
++cpp_space_before_open_square_bracket=false
++cpp_space_within_square_brackets=false
++cpp_space_before_empty_square_brackets=false
++cpp_space_between_empty_square_brackets=false
++cpp_space_group_square_brackets=true
++cpp_space_within_lambda_brackets=false
++cpp_space_between_empty_lambda_brackets=false
++cpp_space_before_comma=false
++cpp_space_after_comma=true
++cpp_space_remove_around_member_operators=true
++cpp_space_before_inheritance_colon=true
++cpp_space_before_constructor_colon=true
++cpp_space_remove_before_semicolon=true
++cpp_space_after_semicolon=false
++cpp_space_remove_around_unary_operator=true
++cpp_space_around_binary_operator=insert
++cpp_space_around_assignment_operator=insert
++cpp_space_pointer_reference_alignment=left
++cpp_space_around_ternary_operator=insert
++cpp_wrap_preserve_blocks=one_liners
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a5dcb25..abe8a0b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -12,9 +12,13 @@ cmake_minimum_required(VERSION 3.2.0)
+ 
+ project(CGraph VERSION 2.5.4)
+ 
++set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
++
+ # CGraph默认使用C++11版本，推荐使用C++17版本。暂不支持C++11以下版本
+ set(CMAKE_CXX_STANDARD 11)
+ 
++set(CMAKE_DEBUG_POSTFIX "d")
++set(CMAKE_RELEASE_POSTFIX "")
+ option(CGRAPH_BUILD_FUNCTIONAL_TESTS "Enables builds of functional tests" OFF)
+ option(CGRAPH_BUILD_PERFORMANCE_TESTS "Enables builds of performance tests" OFF)
+ 
+@@ -24,8 +28,8 @@ option(CGRAPH_BUILD_PERFORMANCE_TESTS "Enables builds of performance tests" OFF)
+ # add CGraph environment info
+ include(cmake/CGraph-env-include.cmake)
+ 
+-add_subdirectory(./tutorial)
+-add_subdirectory(./example)
++#add_subdirectory(./tutorial)
++#add_subdirectory(./example)
+ 
+ # 功能测试相关内容
+ if(CGRAPH_BUILD_FUNCTIONAL_TESTS)
+@@ -37,4 +41,4 @@ endif(CGRAPH_BUILD_FUNCTIONAL_TESTS)
+ if(CGRAPH_BUILD_PERFORMANCE_TESTS)
+     message("-- [CGraph] build performance tests")
+     add_subdirectory(./test/Performance)
+-endif(CGRAPH_BUILD_PERFORMANCE_TESTS)
++endif(CGRAPH_BUILD_PERFORMANCE_TESTS)
+\ No newline at end of file
+diff --git a/cmake/CGraph-env-include.cmake b/cmake/CGraph-env-include.cmake
+index 6471c96..9e921d6 100644
+--- a/cmake/CGraph-env-include.cmake
++++ b/cmake/CGraph-env-include.cmake
+@@ -29,9 +29,72 @@ ELSEIF(WIN32)
+     # 本工程也支持在windows平台上的mingw环境使用
+ ENDIF()
+ 
+-include_directories(${CGRAPH_PROJECT_ROOT_DIR}/src/)    # 直接加入"CGraph.h"文件对应的位置
++#include_directories(${CGRAPH_PROJECT_ROOT_DIR}/src/)    # 直接加入"CGraph.h"文件对应的位置
+ 
+ # 以下三选一，本地编译执行，推荐OBJECT方式
+-add_library(CGraph OBJECT ${CGRAPH_PROJECT_SRC_LIST})      # 通过代码编译
+-# add_library(CGraph SHARED ${CGRAPH_PROJECT_SRC_LIST})    # 编译libCGraph动态库
++# add_library(CGraph OBJECT ${CGRAPH_PROJECT_SRC_LIST})      # 通过代码编译
++add_library(CGraph SHARED ${CGRAPH_PROJECT_SRC_LIST})    # 编译libCGraph动态库
+ # add_library(CGraph STATIC ${CGRAPH_PROJECT_SRC_LIST})    # 编译libCGraph静态库
++
++target_include_directories(${CMAKE_PROJECT_NAME}
++  PUBLIC
++    $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include/>
++    $<BUILD_INTERFACE:${CGRAPH_PROJECT_ROOT_DIR}/src>
++    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
++  PRIVATE
++    $<BUILD_INTERFACE:${CGRAPH_PROJECT_ROOT_DIR}/src>
++)
++
++###############
++# For Windows export
++##
++include(GenerateExportHeader)
++generate_export_header (
++  ${CMAKE_PROJECT_NAME}
++  EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Export.h"
++)
++
++###############
++# Installation
++##
++
++include(GNUInstallDirs)
++
++install(TARGETS ${CMAKE_PROJECT_NAME}
++  EXPORT ${CMAKE_PROJECT_NAME}Targets
++
++  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++)
++
++install(DIRECTORY ${CGRAPH_PROJECT_ROOT_DIR}/src/ DESTINATION include FILES_MATCHING PATTERN "*.h" PATTERN "*.inl")
++
++install(EXPORT ${CMAKE_PROJECT_NAME}Targets
++  FILE ${CMAKE_PROJECT_NAME}Targets.cmake
++  NAMESPACE ${CMAKE_PROJECT_NAME}::
++  DESTINATION share/CGraph
++)
++
++include(CMakePackageConfigHelpers)
++
++write_basic_package_version_file( "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}ConfigVersion.cmake" 
++  COMPATIBILITY SameMajorVersion 
++)
++
++configure_package_config_file(${CGRAPH_PROJECT_ROOT_DIR}/cmake/${CMAKE_PROJECT_NAME}Config.cmake.in
++  ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake
++  INSTALL_DESTINATION share/CGraph
++)
++
++install(FILES
++  ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake
++  ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}ConfigVersion.cmake
++  DESTINATION share/CGraph
++)
++
++
++install(FILES
++  ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Export.h
++  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${project_name}
++)
+\ No newline at end of file
+diff --git a/cmake/CGraphConfig.cmake.in b/cmake/CGraphConfig.cmake.in
+new file mode 100644
+index 0000000..8535ade
+--- /dev/null
++++ b/cmake/CGraphConfig.cmake.in
+@@ -0,0 +1,9 @@
++get_filename_component(CGraph_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
++
++include(CMakeFindDependencyMacro)
++
++if(NOT TARGET CGraph::CGraph)
++    include("${CGraph_CMAKE_DIR}/CGraphTargets.cmake")
++endif()
++
++set(CGraph_LIBRARIES CGraph::CGraph)
+\ No newline at end of file
+diff --git a/src/GraphCtrl/GraphElement/GAdapter/GSingleton/GSingleton.h b/src/GraphCtrl/GraphElement/GAdapter/GSingleton/GSingleton.h
+index 22946b3..6d20990 100644
+--- a/src/GraphCtrl/GraphElement/GAdapter/GSingleton/GSingleton.h
++++ b/src/GraphCtrl/GraphElement/GAdapter/GSingleton/GSingleton.h
+@@ -10,43 +10,43 @@
+ #define CGRAPH_GSINGLETON_H
+ 
+ #include "../GAdapter.h"
++#include "CGraphExport.h"
+ 
+ CGRAPH_NAMESPACE_BEGIN
+ 
+-template<typename T>
++template <typename T>
+ class GSingleton : public GAdapter {
+-private:
+-    explicit GSingleton();
++ private:
++  explicit GSingleton();
+ 
+-    CStatus init() override;
+-    CStatus run() override;
+-    CStatus destroy() override;
++  CStatus init() override;
++  CStatus run() override;
++  CStatus destroy() override;
+ 
+-    CStatus addElementInfo(const std::set<GElementPtr> &dependElements,
+-                           const std::string &name,
+-                           CSize loop) final;
++  CStatus addElementInfo(const std::set<GElementPtr> &dependElements,
++                         const std::string &name, CSize loop) final;
+ 
+-    CStatus addManagers(GParamManagerPtr paramManager,
+-                        GEventManagerPtr eventManager) final;
++  CStatus addManagers(GParamManagerPtr paramManager,
++                      GEventManagerPtr eventManager) final;
+ 
+-    CBool isHold() final;
++  CBool isHold() final;
+ 
+-    CBool isMatch() final;
++  CBool isMatch() final;
+ 
+-    CBool isRegistered() const final;
++  CBool isRegistered() const final;
+ 
+-private:
+-    static USingleton<T> s_singleton_;                    // 单例
+-    static std::atomic<CBool> s_is_init_;                 // 标志是否被初始化过
++ private:
++  static USingleton<T> CGRAPH_EXPORT s_singleton_;  // 单例
++  static std::atomic<CBool> CGRAPH_EXPORT s_is_init_;  // 标志是否被初始化过
+ 
+-    friend class GPipeline;
++  friend class GPipeline;
+ };
+ 
+-template<typename T>
++template <typename T>
+ using GSingletonPtr = GSingleton<T> *;
+ 
+ CGRAPH_NAMESPACE_END
+ 
+ #include "GSingleton.inl"
+ 
+-#endif //CGRAPH_GSINGLETON_H
++#endif  // CGRAPH_GSINGLETON_H
+\ No newline at end of file
+diff --git a/src/GraphCtrl/GraphMessage/GMessageManagerSingleton.h b/src/GraphCtrl/GraphMessage/GMessageManagerSingleton.h
+index 74ec2f0..020ba3e 100644
+--- a/src/GraphCtrl/GraphMessage/GMessageManagerSingleton.h
++++ b/src/GraphCtrl/GraphMessage/GMessageManagerSingleton.h
+@@ -9,8 +9,9 @@
+ #ifndef CGRAPH_GMESSAGEMANAGERSINGLETON_H
+ #define CGRAPH_GMESSAGEMANAGERSINGLETON_H
+ 
+-#include "GMessageObject.h"
++#include "CGraphExport.h"
+ #include "GMessageManager.h"
++#include "GMessageObject.h"
+ 
+ CGRAPH_NAMESPACE_BEGIN
+ 
+@@ -25,7 +26,7 @@ public:
+     }
+ 
+ private:
+-    static USingleton<GMessageManager<>, USingletonType::LAZY, false> singleton_;    // message管理类。注意：这个单例，是不需要被init()的
++    static USingleton<GMessageManager<>, USingletonType::LAZY, false> CGRAPH_EXPORT singleton_;    // message管理类。注意：这个单例，是不需要被init()的
+ };
+ 
+ CGRAPH_NAMESPACE_END
