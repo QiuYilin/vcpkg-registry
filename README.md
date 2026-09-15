@@ -3,6 +3,32 @@ Vcpkg registry for personal use
 
 # usage
 
+For VScode: add this to CMakePresets.json
+
+```
+{
+    "version": 
+    "configurePresets": [
+        {
+            "name": 
+            "displayName": ,
+            "description": ,
+            "generator": ,
+            "toolset": ,
+            "architecture": ,
+            "binaryDir": ,
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": [path of vcpkg.cmake],
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe"
+            }
+        }
+    ]
+}
+
+```
+
 
 Add the file vcpkg-configuration.json to the root directory of vcpkg, and it will run with this configuration under the manifest mode.
 
