@@ -50,7 +50,7 @@ vcpkg-configuration.json
                 "taskflow",
                 "qtnodeeditor"
             ],
-            "baseline": "<commit-sha-on-main>"
+            "baseline": "66816546f4e403710fd51bc26fd1c6a10b57ccbf"
         }
     ]
 }
