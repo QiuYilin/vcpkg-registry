@@ -1,6 +1,7 @@
 {
   "name": "qtnodeeditor",
   "version": "3.0.16",
+  "port-version": 1,
   "description": "Qt Node Editor: node-based dataflow modelling on top of QGraphicsScene.",
   "homepage": "https://github.com/paceholder/nodeeditor",
   "license": "BSD-3-Clause",
