@@ -1,0 +1,42 @@
+name: Verify versions database
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  verify-versions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checkout vcpkg
+        uses: actions/checkout@v4
+        with:
+          repository: microsoft/vcpkg
+          path: vcpkg
+
+      - name: Bootstrap vcpkg
+        shell: bash
+        run: ./vcpkg/bootstrap-vcpkg.sh
+
+      - name: Verify versions database
+        shell: bash
+        run: |
+          # Not every mismatch is a real failure, so keep the exit code and judge the log.
+          set +e
+          ./vcpkg/vcpkg x-ci-verify-versions \
+            --x-builtin-ports-root="$GITHUB_WORKSPACE/ports" \
+            --x-builtin-registry-versions-dir="$GITHUB_WORKSPACE/versions" \
+            --verify-git-trees \
+            --verbose > verify.log 2>&1
+          echo "vcpkg x-ci-verify-versions exit code: $?"
+          cat verify.log
+          # Dependencies of the registry's ports (vcpkg-cmake, qtbase, ...) live in
+          # the built-in registry, so "the dependency ... does not exist" is a false
+          # positive here. Fail only on real version-database errors.
+          if grep -E 'error:' verify.log | grep -vE 'the dependency .* does not exist in the version database'; then
+            echo "version database verification failed"
+            exit 1
+          fi
