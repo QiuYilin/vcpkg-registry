@@ -1,0 +1,25 @@
+{
+  "name": "qtnodeeditor",
+  "version": "3.0.16",
+  "description": "Qt Node Editor: node-based dataflow modelling on top of QGraphicsScene.",
+  "homepage": "https://github.com/paceholder/nodeeditor",
+  "license": "BSD-3-Clause",
+  "dependencies": [
+    {
+      "name": "qtbase",
+      "features": [
+        "gui",
+        "opengl",
+        "widgets"
+      ]
+    },
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    }
+  ]
+}

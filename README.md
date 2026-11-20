@@ -46,16 +46,28 @@ vcpkg-configuration.json
             "kind": "git",
             "repository": "https://github.com/QiuYilin/vcpkg-registry",
             "packages": [
-                "cgraph"
+                "cgraph",
+                "taskflow",
+                "qtnodeeditor"
             ],
-            "baseline": "aa4754b217e4c3a4e3633c56f0b6637b8f75d617"
+            "baseline": "<commit-sha-on-main>"
         }
     ]
 }
 
 ```
 
+`baseline` is any commit on `main` of this registry that contains the ports you use.
 
+# Ports
+
+| Port | Version | Notes |
+| --- | --- | --- |
+| cgraph | 2.5.4 | |
+| taskflow | 3.11.0 | Last 3.x line, so C++17 projects can avoid the 4.0 requirement. |
+| qtnodeeditor | 3.0.16 | [QtNodes](https://github.com/paceholder/nodeeditor) fork builds; needs `qtbase` with `gui`, `opengl`, `widgets`, which vcpkg builds from source. |
+
+The versions database is checked in CI with `vcpkg x-ci-verify-versions --verify-git-trees` (see `.github/workflows/verify-versions.yml`).
 
 # Some recommended vcpkg registries
 
