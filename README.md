@@ -51,7 +51,7 @@ vcpkg-configuration.json
                 "taskgraph",
                 "qtnodeeditor"
             ],
-            "baseline": "66816546f4e403710fd51bc26fd1c6a10b57ccbf"
+            "baseline": "5fe9d626fa5d5004c92ef0de992773f5b88fe718"
         }
     ]
 }
