@@ -11,6 +11,10 @@
     "taskflow": {
       "baseline": "3.11.0",
       "port-version": 0
+    },
+    "taskgraph": {
+      "baseline": "0.2.0",
+      "port-version": 0
     }
   }
 }

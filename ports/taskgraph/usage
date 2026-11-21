@@ -1,0 +1,8 @@
+taskgraph provides CMake targets:
+
+  find_package(taskgraph CONFIG REQUIRED)
+  target_link_libraries(main PRIVATE taskgraph::Core)
+
+  # UI components (when the corresponding feature is enabled):
+  #   find_package(taskgraph COMPONENTS Core Ui)
+  #   target_link_libraries(main PRIVATE taskgraph::Ui)

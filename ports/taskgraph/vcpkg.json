@@ -1,0 +1,40 @@
+{
+  "name": "taskgraph",
+  "version": "0.2.0",
+  "description": "Dataflow programming wrapper of taskflow, with optional ImGui and Qt frontends.",
+  "homepage": "https://github.com/QiuYilin/taskgraph",
+  "license": "BSD-3-Clause",
+  "supports": "!uwp",
+  "dependencies": [
+    "nlohmann-json",
+    "spdlog",
+    "taskflow",
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    }
+  ],
+  "features": {
+    "ui-imgui": {
+      "description": "Build the ImGui workbench frontend (UiModel + Ui).",
+      "dependencies": [
+        "imgui",
+        "imgui-node-editor",
+        "portable-file-dialogs"
+      ]
+    },
+    "ui-qt": {
+      "description": "Build the Qt workbench frontend (UiModel + Ui).",
+      "dependencies": [
+        "portable-file-dialogs",
+        "qt-advanced-docking-system",
+        "qtbase",
+        "qtnodeeditor"
+      ]
+    }
+  }
+}
