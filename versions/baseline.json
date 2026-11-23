@@ -4,6 +4,10 @@
       "baseline": "2.5.4",
       "port-version": 0
     },
+    "imgui-vtk": {
+      "baseline": "1.0.0",
+      "port-version": 0
+    },
     "qtnodeeditor": {
       "baseline": "3.0.16",
       "port-version": 1

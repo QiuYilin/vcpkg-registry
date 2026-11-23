@@ -47,6 +47,7 @@ vcpkg-configuration.json
             "repository": "https://github.com/QiuYilin/vcpkg-registry",
             "packages": [
                 "cgraph",
+                "imgui-vtk",
                 "taskflow",
                 "taskgraph",
                 "qtnodeeditor"
@@ -65,6 +66,7 @@ vcpkg-configuration.json
 | Port | Version | Notes |
 | --- | --- | --- |
 | cgraph | 2.5.4 | |
+| imgui-vtk | 1.0.0 | VTK scenes rendered inside Dear ImGui (`VtkViewer`); static lib + CMake config; needs `imgui`, `glfw3`, `gl3w`, `vtk`. |
 | taskflow | 3.11.0 | Last 3.x line, so C++17 projects can avoid the 4.0 requirement. |
 | taskgraph | 0.2.0 | Dataflow wrapper of taskflow; optional mutually-exclusive `ui-qt` / `ui-imgui` workbench features. |
 | qtnodeeditor | 3.0.16 | [QtNodes](https://github.com/paceholder/nodeeditor) fork builds; needs `qtbase` with `gui`, `opengl`, `widgets`, which vcpkg builds from source. |

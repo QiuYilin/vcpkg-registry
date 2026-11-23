@@ -1,0 +1,22 @@
+{
+  "name": "imgui-vtk",
+  "version-semver": "1.0.0",
+  "description": "Render VTK scenes inside Dear ImGui windows (VtkViewer; OpenGL + GLFW + GL3W).",
+  "homepage": "https://github.com/trlsmax/imgui-vtk",
+  "license": "MIT",
+  "supports": "!uwp",
+  "dependencies": [
+    "gl3w",
+    "glfw3",
+    "imgui",
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    },
+    "vtk"
+  ]
+}

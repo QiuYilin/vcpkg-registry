@@ -1,0 +1,5 @@
+imgui-vtk provides CMake targets:
+
+  find_package(imgui-vtk CONFIG REQUIRED)
+  target_link_libraries(main PRIVATE imgui-vtk::imgui_vtk)
+  imgui_vtk_autoinit(main)   # required when VTK is built statically
