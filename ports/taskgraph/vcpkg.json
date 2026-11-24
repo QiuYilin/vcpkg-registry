@@ -1,6 +1,6 @@
 {
   "name": "taskgraph",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Dataflow programming wrapper of taskflow, with optional ImGui and Qt frontends.",
   "homepage": "https://github.com/QiuYilin/taskgraph",
   "license": "BSD-3-Clause",
