@@ -17,7 +17,7 @@
       "port-version": 0
     },
     "taskgraph": {
-      "baseline": "0.3.0",
+      "baseline": "0.4.0",
       "port-version": 0
     }
   }
